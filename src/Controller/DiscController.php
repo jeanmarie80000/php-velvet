@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Asset\Package;
+use symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 
 #[Route('/disc')]
 class DiscController extends AbstractController
@@ -16,6 +18,8 @@ class DiscController extends AbstractController
     #[Route('', name: 'app_disc_index', methods: ['GET'])]
     public function index(DiscRepository $discRepository): Response
     {
+        $package = new Package(new EmptyVersionStrategy());
+
         return $this->render('disc/index.html.twig', [
             'discs' => $discRepository->findAll(),
         ]);

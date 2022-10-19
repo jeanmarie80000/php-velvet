@@ -15,6 +15,7 @@ class DiscType extends AbstractType
             ->add('title')
             ->add('picture')
             ->add('label')
+            ->add('price')
             ->add('Artist')
         ;
     }
