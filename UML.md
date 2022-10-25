@@ -1,6 +1,5 @@
 ```mermaid
 classDiagram
-direction RL
 
 class Artist{
 PK - id
