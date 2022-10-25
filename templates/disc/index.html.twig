@@ -22,8 +22,10 @@
                         <li class="list-group-item">Prix : {{ disc.price }} €</li>
                         <li class="list-group-item">Artiste : {{ disc.artist }}</li>
                     </ul>
-                    <a href="{{ path('app_disc_show', {'id': disc.id}) }}" class="btn btn-primary btn-sm">Show</a>
-                    <a href="{{ path('app_disc_edit', {'id': disc.id}) }}" class="btn btn-secondary">edit</a>
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ path('app_disc_show', {'id': disc.id}) }}" class="btn btn-primary">Show</a>
+                        <a href="{{ path('app_disc_edit', {'id': disc.id}) }}" class="btn btn-secondary">Edit</a>
+                    </div>
                 </div>
             </div>
         </div>

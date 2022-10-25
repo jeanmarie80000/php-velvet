@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\DiscRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
 
 #[ORM\Entity(repositoryClass: DiscRepository::class)]
 class Disc
@@ -87,5 +90,29 @@ class Disc
         $this->price = $price;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('title', new Assert\Regex
+            ([
+                'pattern' => '/^[a-zA-Z]\w+$/',
+                'message' => 'Ne peut contenir que des lettres.'
+            ])
+        );
+
+        $metadata->addPropertyConstraint('label', new Assert\Regex
+            ([
+                'pattern' => '/^[a-zA-Z]\w+$/',
+                'message' => 'Ne peut contenir que des lettres.'
+            ])
+        );
+        
+        $metadata->addPropertyConstraint('price', new Assert\Regex
+            ([
+                'pattern' => '/^[\d]{1,3}([.,0-9]{3})?/',
+                'message' => 'Ne peut contenir que des chiffres ou un nombre avec deux décimales.'
+            ])
+        );
     }
 }

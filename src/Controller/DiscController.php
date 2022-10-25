@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Asset\Package;
 use symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[Route('/disc')]
 class DiscController extends AbstractController
@@ -31,10 +33,10 @@ class DiscController extends AbstractController
         $disc = new Disc();
         $form = $this->createForm(DiscType::class, $disc);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $discRepository->save($disc, true);
 
+            $discRepository->save($disc, true);
             return $this->redirectToRoute('app_disc_index', [], Response::HTTP_SEE_OTHER);
         }
 
