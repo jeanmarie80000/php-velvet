@@ -92,27 +92,26 @@ class Disc
         return $this;
     }
 
+
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('title', new Assert\Regex
-            ([
-                'pattern' => '/^[a-zA-Z]\w+$/',
-                'message' => 'Ne peut contenir que des lettres.'
-            ])
-        );
+        $metadata->addPropertyConstraint('title', new Assert\Regex([
+            'pattern' => '/^[a-zA-Z]+$/',
+            'message' => "N'accepte que les lettres",
+        ]));
 
-        $metadata->addPropertyConstraint('label', new Assert\Regex
-            ([
-                'pattern' => '/^[a-zA-Z]\w+$/',
-                'message' => 'Ne peut contenir que des lettres.'
-            ])
-        );
-        
-        $metadata->addPropertyConstraint('price', new Assert\Regex
-            ([
-                'pattern' => '/^[\d]{1,3}([.,0-9]{3})?/',
-                'message' => 'Ne peut contenir que des chiffres ou un nombre avec deux décimales.'
-            ])
-        );
+        $metadata->addPropertyConstraint('picture', new Assert\Regex([
+            'pattern' => '/^\w+/',
+        ]));
+
+        $metadata->addPropertyConstraint('label', new Assert\Regex([
+            'pattern' => '/^[a-zA-Z]+$/',
+            'message' => "N'accepte que les lettres",
+        ]));
+
+        $metadata->addPropertyConstraint('price', new Assert\Regex([
+            'pattern' => '/^[0-9]{1,9}([\.\,]{1}[0-9]{2})?/',
+            'message' => "N'accepte que les chiffres avec une virgule ou un point. Ne peut y avoir que deux chiffres après la virgule/le point."
+        ]));
     }
 }

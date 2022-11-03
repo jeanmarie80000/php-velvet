@@ -2,28 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Disc;
+use App\Entity\Artist;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DiscType extends AbstractType
+class ArtistType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('picture')
-            ->add('label')
-            ->add('price')
-            ->add('Artist')
+            ->add('name')
+            ->add('url')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Disc::class,
+            'data_class' => Artist::class,
         ]);
     }
 }

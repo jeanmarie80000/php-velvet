@@ -11,22 +11,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Asset\Package;
 use symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Config\FrameworkConfig;
 
 #[Route('/disc')]
 class DiscController extends AbstractController
 {
-    #[Route('', name: 'app_disc_index', methods: ['GET'])]
+    #[Route('/', name: 'app_disc_index', methods: ['GET'])]
     public function index(DiscRepository $discRepository): Response
     {
         $package = new Package(new EmptyVersionStrategy());
-
+        
         return $this->render('disc/index.html.twig', [
             'discs' => $discRepository->findAll(),
         ]);
     }
-
+    
     #[Route('/new', name: 'app_disc_new', methods: ['GET', 'POST'])]
     public function new(Request $request, DiscRepository $discRepository): Response
     {
@@ -34,9 +33,12 @@ class DiscController extends AbstractController
         $form = $this->createForm(DiscType::class, $disc);
         $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid())
+        {    
             $discRepository->save($disc, true);
+            
+            $this->addFlash('success', 'Test');
+            
             return $this->redirectToRoute('app_disc_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -59,9 +61,11 @@ class DiscController extends AbstractController
     {
         $form = $this->createForm(DiscType::class, $disc);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $discRepository->save($disc, true);
+
+            $this->addFlash('success', 'Test');
 
             return $this->redirectToRoute('app_disc_index', [], Response::HTTP_SEE_OTHER);
         }

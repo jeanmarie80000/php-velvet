@@ -7,4 +7,12 @@
 
     {{ include('disc/_form.html.twig', {'button_label': 'Update'}) }}
 
+    <div class="btn btn-secondary">
+        <a href="{{ path('app_disc_index') }}">Back to list</a>
+    </div>
+
+    <div class="btn btn-danger">
+        {{ include('disc/_delete_form.html.twig') }}
+    </div>
+
 {% endblock %}
