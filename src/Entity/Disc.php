@@ -6,7 +6,6 @@ use App\Repository\DiscRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Regex;
 
 #[ORM\Entity(repositoryClass: DiscRepository::class)]
 class Disc
@@ -19,6 +18,9 @@ class Disc
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    /**
+     * @ORM\Column(type="string")
+     */
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
@@ -52,7 +54,8 @@ class Disc
         return $this->picture;
     }
 
-    public function setPicture(string $picture): self
+    // string est déjà précisé plus haut
+    public function setPicture($picture): self
     {
         $this->picture = $picture;
         return $this;
@@ -98,10 +101,6 @@ class Disc
         $metadata->addPropertyConstraint('title', new Assert\Regex([
             'pattern' => '/^[a-zA-Z]+$/',
             'message' => "N'accepte que les lettres",
-        ]));
-
-        $metadata->addPropertyConstraint('picture', new Assert\Regex([
-            'pattern' => '/^\w+/',
         ]));
 
         $metadata->addPropertyConstraint('label', new Assert\Regex([

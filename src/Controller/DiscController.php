@@ -11,12 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Asset\Package;
 use symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
-use Symfony\Config\FrameworkConfig;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Form\FormTypeInterface;
+
+use function PHPUnit\Framework\throwException;
 
 #[Route('/disc')]
 class DiscController extends AbstractController
 {
-    #[Route('/', name: 'app_disc_index', methods: ['GET'])]
+    #[Route('/index', name: 'app_disc_index', methods: ['GET'])]
     public function index(DiscRepository $discRepository): Response
     {
         $package = new Package(new EmptyVersionStrategy());
@@ -32,13 +36,11 @@ class DiscController extends AbstractController
         $disc = new Disc();
         $form = $this->createForm(DiscType::class, $disc);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid())
         {    
             $discRepository->save($disc, true);
-            
-            $this->addFlash('success', 'Test');
-            
+            $this->addFlash('success', 'Création du disque réussie');
             return $this->redirectToRoute('app_disc_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -57,17 +59,42 @@ class DiscController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_disc_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Disc $disc, DiscRepository $discRepository): Response
+    public function edit(Request $request, Disc $disc, DiscRepository $discRepository, SluggerInterface $slugger): Response
     {
+        $idDisc = $disc->getId();
         $form = $this->createForm(DiscType::class, $disc);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $pictureFile */
+            $pictureFile = $form['picture']->getData();
+            
+            if($pictureFile) 
+            {
+                $originalFileName = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFileName = $slugger->slug($originalFileName);
+                $newPicture = $safeFileName.'-'.uniqid().'.'.$pictureFile->guessExtension();
+                
+                $disc->setPicture($newPicture);
+                
+                try
+                {
+                    $pictureFile->move(
+                        $this->getParameter('cover_directory'),
+                        $newPicture
+                    );
+                } catch (FileException $e) {
+                    
+                }
+                
+            }
+            
             $discRepository->save($disc, true);
 
-            $this->addFlash('success', 'Test');
-
+            $this->addFlash('success', 'Modification(s) réussie(s)');
             return $this->redirectToRoute('app_disc_index', [], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->renderForm('disc/edit.html.twig', [

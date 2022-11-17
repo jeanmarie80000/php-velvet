@@ -4,8 +4,10 @@ namespace App\Form;
 
 use App\Entity\Disc;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class DiscType extends AbstractType
 {
@@ -13,7 +15,16 @@ class DiscType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('picture')
+            ->add('picture', FileType::class,[
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false, 
+                'constraints' => [
+                    new Assert\Image([
+                        'mimeTypesMessage' => 'Inserez une photo format jpg, jpeg ou png',
+                    ])
+                ]
+            ])
             ->add('label')
             ->add('price')
             ->add('Artist')
