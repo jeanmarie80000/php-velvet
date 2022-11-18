@@ -18,5 +18,14 @@ Artist
 price
 }
 
+class User{
+PK - id
+mail
+password
+roles
+userIdentifier
+credentials
+}
+
 
 ```
