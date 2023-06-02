@@ -1,1 +1,1 @@
-# php-velvet
+Learning project permanently stopped
